@@ -100,7 +100,8 @@ namespace Juntendo.MedPhys.Esapi.DepthCalculator
 
             ReferencePointNames.Add("");
 
-            foreach (var fieldReferencePoint in planSetup.Beams.First().FieldReferencePoints)
+            foreach (var fieldReferencePoint in planSetup.Beams.First()
+                .FieldReferencePoints)
             {
                 if (Double.IsNaN(fieldReferencePoint.RefPointLocation.x))
                 {
@@ -133,14 +134,20 @@ namespace Juntendo.MedPhys.Esapi.DepthCalculator
             PointDepths.Clear();
             foreach (var beam in beams)
             {
-                var query = from f in beam.FieldReferencePoints
+                if (!beam.FieldReferencePoints.Any())
+                    continue;
+
+                var query = 
+                    from f in beam.FieldReferencePoints
                             where f.ReferencePoint.Id == SelectedReferencePointName
                             select f;
                 var fieldReferencePoint = query.Single();
 
                 VVector targetPointDCSInMm = new VVector(fieldReferencePoint.RefPointLocation.x,
                     fieldReferencePoint.RefPointLocation.y, fieldReferencePoint.RefPointLocation.z);
-                double depth = DepthCalculator.DepthInBodyDCSInMm(targetPointDCSInMm, beam, planSetup);
+
+                var calculator = new DepthCalculator();
+                double depth = calculator.DepthInBodyDCSInMm(targetPointDCSInMm, beam, planSetup);
 
                 PointDepths.Add(new PointDepth { BeamId = beam.Id, DepthValue = depth,
                     EffectiveDepthValue = fieldReferencePoint.EffectiveDepth/10, DoseValue = fieldReferencePoint.FieldDose.Dose });
@@ -159,7 +166,8 @@ namespace Juntendo.MedPhys.Esapi.DepthCalculator
             PointDepths.Clear();
             foreach (var beam in beams)
             {
-                double depth = DepthCalculator.DepthInBody(targetPoint, beam, planSetup);
+                var calculator = new DepthCalculator();
+                double depth = calculator.DepthInBody(targetPoint, beam, planSetup);
                 PointDepths.Add(new PointDepth { BeamId = beam.Id, DepthValue = depth });
             }
 

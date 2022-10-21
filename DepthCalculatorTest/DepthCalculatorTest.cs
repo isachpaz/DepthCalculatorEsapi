@@ -20,7 +20,7 @@ namespace Juntendo.MedPhys.DepthCalculatorTest
         {
             try
             {
-                using (var app = VMS.TPS.Common.Model.API.Application.CreateApplication("SysAdmin", "SysAdmin"))
+                using (var app = Application.CreateApplication())
                 {
                     Execute(app);
                 }
@@ -34,9 +34,9 @@ namespace Juntendo.MedPhys.DepthCalculatorTest
         static void Execute(VMS.TPS.Common.Model.API.Application app)
         {
             
-            var patientId = "RandoPhantom";
+            var patientId = "29106509";
             var courseId = "C1";
-            var planId = "Plan2";
+            var planId = "xHM7";
 
             var PatientId = patientId;
 
