@@ -64,19 +64,16 @@ namespace Juntendo.MedPhys.Esapi.DepthCalculator
             int sum = 0;
             bool isEdgeDetected = false;
 
-            while (!isEdgeDetected)
+           while (!isEdgeDetected && sum < numberOfSegment)
             {
-                foreach (bool p in segmentProfile)
+                switch (segmentProfile[sum])
                 {
-                    switch (p)
-                    {
-                        case false:
-                            sum += 1;
-                            break;
-                        case true:
-                            isEdgeDetected = true;
-                            break;
-                    }
+                    case false:
+                        sum++;
+                        break;
+                    case true:
+                        isEdgeDetected = true;
+                        break;
                 }
             }
 
